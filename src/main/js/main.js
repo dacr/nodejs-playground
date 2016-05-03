@@ -24,6 +24,13 @@ function npmls(cb, glob) {
   });
 }
 
-npmls(console.log);
+function flatten(ob, sep='.') {
+  for(var key in Object.keys(ob)) { 
+    var value = ob[key]
+  }
+}
 
-npmls(console.log, true);
+
+module.exports.chk = chk
+module.exports.fct = fct
+module.exports.flatten = flatten

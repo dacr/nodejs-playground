@@ -12,10 +12,12 @@ run: compile
 	node ${OUT}
 
 test:
-	${BN}/mocha --recursive src
+	${BN}/mocha --compilers js:babel-core/register --recursive src
 
-init:
-	npm install unit.js
-	npm install mocha
-	npm install --save-dev babel-cli
-	npm install --save-dev babel-preset-es2015
+deps:
+	npm install chai --save
+	npm install mocha --save
+	npm install babel-core --save-dev 
+	npm install babel-cli --save-dev 
+	npm install babel-preset-es2015 --save-dev 
+	npm install babel-preset-react --save-dev 
