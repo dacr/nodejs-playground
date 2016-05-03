@@ -1,5 +1,5 @@
-
 var cp = require('child_process')
+var ii = require('immutable')
 
 cp.exec("uname -a", (rc, out, err) => {console.log(out)})
 
@@ -24,13 +24,32 @@ function npmls(cb, glob) {
   });
 }
 
-function flatten(ob, sep='.') {
-  for(var key in Object.keys(ob)) { 
-    var value = ob[key]
+
+function flatten(ob, prefix='', sep='.') {
+  var accu=ii.Map()
+  function makekey(path) {
+    return path.filter((s)=> s.length>0).join(sep)
   }
+  function worker(value, path) {
+    if (typeof value === 'function') { // Then it is ignored
+    } else if (Array.isArray(value)) {
+      accu = accu.set(makekey(path), value)
+    } else if (typeof value === 'object') {
+      for(var key in value) {
+        if (key[0]!='_') worker(value[key], path.push(key))
+      }
+    } else {
+      accu = accu.set(makekey(path), value)
+    }
+  }
+  worker(ob, ii.List(prefix.split(sep)))
+  return accu.toJS()
 }
 
+
+function pid() {  return process.pid }
 
 module.exports.chk = chk
 module.exports.fct = fct
 module.exports.flatten = flatten
+module.exports.pid = pid
