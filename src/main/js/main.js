@@ -16,14 +16,20 @@ console.log(ppy(process.config))
 console.log(ppy(process.versions))
 
 
-function npmls(cb, glob) {
+function pprint(ob) {
+  console.log(JSON.stringify(ob, null, 2))
+}
+
+
+function npmls(callback=pprint, glob=false) {
   var cmd = 'npm ls --json'
   if (glob)  cmd += ' -g'
   require('child_process').exec(cmd, (err, stdout, stderr) => {
-    cb(JSON.parse(stdout.toLocaleString()))
+    callback(JSON.parse(stdout.toLocaleString()))
   });
 }
 
+npmls()
 
 function flatten(ob, prefix='', sep='.') {
   var accu=ii.Map()
