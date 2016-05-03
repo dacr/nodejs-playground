@@ -29,7 +29,6 @@ function npmls(callback=pprint, glob=false) {
   });
 }
 
-npmls()
 
 function flatten(ob, prefix='', sep='.') {
   var accu=ii.Map()
@@ -59,3 +58,4 @@ module.exports.chk = chk
 module.exports.fct = fct
 module.exports.flatten = flatten
 module.exports.pid = pid
+module.exports.npmls = npmls

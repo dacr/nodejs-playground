@@ -3,8 +3,10 @@ var app = require('./../../main/js/main')
 
 var chai = require('chai')
 var chaii = require('chai-immutable')
+var chaiAsPromised = require('chai-as-promised');
 
 var expect = chai.expect
+chai.use(chaiAsPromised);
 
 describe('chk function', () => {
   it ('should add 2', () => {
@@ -57,3 +59,12 @@ describe('flatten feature', () => {
   })
 })
 
+
+describe('modules', () => {
+  it ('should report some installed module', () => {
+    var value = new Promise( (resolve, reject) => {
+      app.npmls( (ob) => {resolve(ob) })
+    } )
+    expect(value).to.equal('something');
+  } )
+} )

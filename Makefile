@@ -22,4 +22,9 @@ deps:
 	npm install babel-preset-es2015 --save-dev 
 	npm install babel-preset-react --save-dev 
 	npm install immutable
-	npm install chai-immutable
+	npm install chai-immutable --save-dev
+	npm install chai-as-promised --save-dev
+	
+clean:
+	rm -f npm-debug.log*
+	
