@@ -35,12 +35,10 @@ function npmls(callback=pprint, glob=false) {
 //npmls()
 
 // -----------------------------------------------------------------------------
-function flatten(ob, options={}) {
-  if (options.sep === undefined) options.sep = '.'
-  if (options.prefix === undefined) options.prefix = ''
+function flatten(ob, {prefix='', sep='.'}={} ) {
   var accu=ii.Map()
   function makekey(path) {
-    return path.filter((s)=> s.length>0).join(options.sep)
+    return path.filter((s)=> s.length>0).join(sep)
   }
   function worker(value, path) {
     if (typeof value === 'function') { // Then it is ignored
@@ -54,7 +52,7 @@ function flatten(ob, options={}) {
       accu = accu.set(makekey(path), value)
     }
   }
-  worker(ob, ii.List(options.prefix.split(options.sep)))
+  worker(ob, ii.List(prefix.split(sep)))
   return accu.toJS()
 }
 
