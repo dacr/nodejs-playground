@@ -3,10 +3,10 @@ var app = require('./../../main/js/main')
 
 var chai = require('chai')
 var chaii = require('chai-immutable')
-var chaiAsPromised = require('chai-as-promised');
+var chaip = require('chai-as-promised');
 
 var expect = chai.expect
-chai.use(chaiAsPromised);
+chai.use(chaip);
 
 describe('chk function', () => {
   it ('should add 2', () => {
@@ -50,21 +50,30 @@ describe('flatten feature', () => {
     expect(app.flatten(process.versions)).to.contains.any.keys('http_parser')
   })
   it ('should work with process.config', () => {
-    var flat = app.flatten(process.config)
+    const flat = app.flatten(process.config)
     expect(flat).to.contains.any.keys('variables.target_arch')
   })
   it ('should work with process.argv with an array content', () => {
-    var flat = app.flatten(process.argv, 'argv')
+    const flat = app.flatten(process.argv, 'argv')
     expect(flat).to.contains.any.keys('argv')
   })
 })
 
+describe('should work with promises', () => {
+  it ('should say us hello', () => {
+    const promise = new Promise( (resolve, reject) => {
+      app.testcb( (ob) => {resolve(ob)} )
+    } )
+    return expect(promise).to.eventually.equal('hello')
+  } )
+} )
+
 
 describe('modules', () => {
   it ('should report some installed module', () => {
-    var value = new Promise( (resolve, reject) => {
-      app.npmls( (ob) => {resolve(ob) })
+    const promise = new Promise( (resolve, reject) => {
+      app.npmls((ob) => { resolve(ob) } )
     } )
-    expect(value).to.equal('something');
+    return expect(promise).to.eventually.have.deep.property('dependencies.babel-cli.version')
   } )
 } )

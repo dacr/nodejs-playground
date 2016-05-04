@@ -9,10 +9,10 @@ compile:
 
 
 run: compile
-	node ${OUT}
+	@node ${OUT}
 
 test:
-	${BN}/mocha --compilers js:babel-core/register --recursive src
+	@${BN}/mocha --compilers js:babel-core/register --recursive src
 
 deps:
 	npm install chai --save

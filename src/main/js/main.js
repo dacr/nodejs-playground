@@ -1,35 +1,40 @@
-var cp = require('child_process')
-var ii = require('immutable')
+const cp = require('child_process')
+const ii = require('immutable')
 
-cp.exec("uname -a", (rc, out, err) => {console.log(out)})
+//cp.exec("uname -a", (rc, out, err) => {console.log(out)})
 
-var fct = (x) => x+1
-
+const fct = (x) => x+1
 function chk(x) { return x+2 }
 
-console.log(fct(2))
-console.log(chk(2))
+const ppy = (ob) => JSON.stringify(ob, null, 2)
 
-var ppy = (ob) => JSON.stringify(ob, null, 2)
-
-console.log(ppy(process.config))
-console.log(ppy(process.versions))
-
+//console.log(ppy(process.config))
+//console.log(ppy(process.versions))
 
 function pprint(ob) {
   console.log(JSON.stringify(ob, null, 2))
 }
 
-
-function npmls(callback=pprint, glob=false) {
-  var cmd = 'npm ls --json'
-  if (glob)  cmd += ' -g'
-  require('child_process').exec(cmd, (err, stdout, stderr) => {
-    callback(JSON.parse(stdout.toLocaleString()))
-  });
+// -----------------------------------------------------------------------------
+function testcb(callback=pprint) {
+  callback("hello")
 }
 
+// -----------------------------------------------------------------------------
+function npmls(callback=pprint, glob=false) {
+  const gopt= (glob)?'-g':''
+  const cmd = `npm ls --json ${gopt}`
+  // take care if maxbuffer is reached the command is then killed,
+  // resulting of an invalid output
+  cp.exec(cmd, {'maxBuffer':10*1024*1024}, (rc, stdout, stderr) => {
+    callback( JSON.parse(stdout.toLocaleString()) )
+  } );
+}
 
+//pprint({'message':'hello world !'})
+//npmls()
+
+// -----------------------------------------------------------------------------
 function flatten(ob, prefix='', sep='.') {
   var accu=ii.Map()
   function makekey(path) {
@@ -40,7 +45,7 @@ function flatten(ob, prefix='', sep='.') {
     } else if (Array.isArray(value)) {
       accu = accu.set(makekey(path), value)
     } else if (typeof value === 'object') {
-      for(var key in value) {
+      for(const key in value) {
         if (key[0]!='_') worker(value[key], path.push(key))
       }
     } else {
@@ -52,6 +57,7 @@ function flatten(ob, prefix='', sep='.') {
 }
 
 
+// -----------------------------------------------------------------------------
 function pid() {  return process.pid }
 
 module.exports.chk = chk
@@ -59,3 +65,4 @@ module.exports.fct = fct
 module.exports.flatten = flatten
 module.exports.pid = pid
 module.exports.npmls = npmls
+module.exports.testcb = testcb

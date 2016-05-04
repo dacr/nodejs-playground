@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+var cp = require('child_process')
+
+function receiver(rc,out,err) {
+  console.log(out)
+}
+
+cp.exec("sleep 5 ; echo hello", receiver)
+
+
