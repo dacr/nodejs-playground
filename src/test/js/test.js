@@ -32,16 +32,21 @@ describe('flatten feature', () => {
     expect(app.flatten({})).to.deep.equal({})
   })
   it ('should work with simple object', () => {
-    expect(app.flatten({'a':1})).to.deep.equal({'a':1})
+    expect(app.flatten({a:1})).to.deep.equal({a:1})
+    expect(app.flatten({'a':1})).to.deep.equal({a:1})
   })
   it ('should work with simple object and a specified prefix', () => {
-    expect(app.flatten({'a':1}, 'root')).to.deep.equal({'root.a':1})
+    expect(app.flatten({a:1}, {prefix:'root'})).to.deep.equal({'root.a':1})
   })
   it ('should work with simple object and a specified longer prefix', () => {
-    expect(app.flatten({'a':1}, 'root.subroot')).to.deep.equal({'root.subroot.a':1})
+    expect(app.flatten({'a':1}, {prefix:'root.subroot'})).to.deep.equal({'root.subroot.a':1})
   })
   it ('should walk into object tree', () => {
     expect(app.flatten({'a':{'b':2}})).to.deep.equal({'a.b':2})
+  })
+  it ('should walk into object tree with a custom separator', () => {
+    expect(app.flatten({'a':{'b':2}}, {sep:'~~'})).to.deep.equal({'a~~b':2})
+    expect(app.flatten({a:{b:{c:3}}}, {sep:'~#~'})).to.deep.equal({'a~#~b~#~c':3})
   })
   it ('should walk through several object subtrees', () => {
     expect(app.flatten({'a':{'b':2}, 'A':{'B':{'C':3}, 'D':4}})).to.deep.equal({'a.b':2, 'A.B.C':3, 'A.D':4})
@@ -54,7 +59,7 @@ describe('flatten feature', () => {
     expect(flat).to.contains.any.keys('variables.target_arch')
   })
   it ('should work with process.argv with an array content', () => {
-    const flat = app.flatten(process.argv, 'argv')
+    const flat = app.flatten(process.argv, {prefix:'argv'})
     expect(flat).to.contains.any.keys('argv')
   })
 })
