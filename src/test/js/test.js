@@ -77,7 +77,9 @@ describe('should work with promises', () => {
 describe('modules', () => {
   it ('should report some installed module', () => {
     const promise = new Promise( (resolve, reject) => {
-      app.npmls((ob) => { resolve(ob) } )
+      function job() { app.npmls( (ob) => { resolve(ob) } ) }
+      setTimeout(()=>job, 5000)
+      //job()
     } )
     return expect(promise).to.eventually.have.deep.property('dependencies.babel-cli.version')
   } )
