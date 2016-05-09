@@ -1,5 +1,10 @@
 const cp = require('child_process')
 const ii = require('immutable')
+const logger = require('winston')
+
+logger.add(logger.transports.File, { filename: 'node.log' });
+
+logger.info(`node application started - nodejs ${process.version}`)
 
 //cp.exec("uname -a", (rc, out, err) => {console.log(out)})
 
@@ -21,9 +26,12 @@ function testcb(callback=pprint) {
 }
 
 // -----------------------------------------------------------------------------
+const NPM_EXE=`./node_modules/.bin/npm`
 function npmls(callback=pprint, glob=false) {
+  logger.info(`npmls called glob=${glob}`)
+  logger.info(`npmls is using this npm exe : ${NPM_EXE}`)
   const gopt= (glob)?'-g':''
-  const cmd = `npm ls --json ${gopt}`
+  const cmd = `${NPM_EXE} ls --json ${gopt}`
   // take care if maxbuffer is reached the command is then killed,
   // resulting of an invalid output
   cp.exec(cmd, {'maxBuffer':10*1024*1024}, (rc, stdout, stderr) => {
@@ -36,6 +44,7 @@ function npmls(callback=pprint, glob=false) {
 
 // -----------------------------------------------------------------------------
 function flatten(ob, {prefix='', sep='.'}={} ) {
+  logger.info(`flatten prefix=${prefix} sep=${sep}`)
   var accu=ii.Map()
   function makekey(path) {
     return path.filter((s)=> s.length>0).join(sep)

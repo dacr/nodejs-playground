@@ -15,16 +15,18 @@ test:
 	@${BN}/mocha --compilers js:babel-core/register --recursive src
 
 deps:
-	npm install chai --save
-	npm install mocha --save
+	npm install immutable --save
+	npm install winston --save
+	npm install npm --save
+	
+	npm install chai --save-dev
+	npm install mocha --save-dev
 	npm install babel-core --save-dev 
 	npm install babel-cli --save-dev 
 	npm install babel-preset-es2015 --save-dev 
 	npm install babel-preset-react --save-dev 
-	npm install immutable
 	npm install chai-immutable --save-dev
 	npm install chai-as-promised --save-dev
 	
 clean:
 	rm -f npm-debug.log*
-	
